@@ -133,3 +133,10 @@ AUTHENTICATION_BACKENDS =[
     'django.contrib.auth.backends.ModelBackend',
     'account.authenticate.EmailBackend',
 ]
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
+EMAIL_HOST_USER = '580df56699f324'
+EMAIL_HOST_PASSWORD = '********c9ce'
+EMAIL_PORT = '2525'
+DEFAULT_FROM_EMAIL = 'Setare Test'

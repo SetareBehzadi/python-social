@@ -35,3 +35,10 @@ class UserLoginForm(forms.Form):
     username = forms.CharField(max_length=60, widget= forms.TextInput(attrs={'class':'form-control', "placeholder": "Your username"}))
     password = forms.CharField(label='password', min_length=5,
                                widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+
+
+class UserForgetPasswordForm(forms.Form):
+    password = forms.CharField(label='password', min_length=5,
+                               widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    re_password = forms.CharField(label='repeat-password', min_length=5,
+                               widget=forms.PasswordInput(attrs={'class': 'form-control'}))

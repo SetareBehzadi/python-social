@@ -2,8 +2,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login, logout
 from django.contrib import messages
+from django.contrib.auth import views as auth_view
 from django.shortcuts import render, redirect
 from django.views import View
+from django.urls import reverse,reverse_lazy
 
 from account.forms import UserRegistrationForm, UserLoginForm
 from post.models import Post
@@ -76,3 +78,17 @@ class UserProfileView(LoginRequiredMixin, View):
         user = User.objects.get(pk=user_id)
         posts = Post.objects.filter(user=user)
         return render(request,'account/profile.html', {'user':user, 'posts':posts})
+
+
+class UserPasswordResetView(auth_view.PasswordResetView):
+    template_name = 'account/password_reset_form.html'
+    success_url = reverse_lazy('account:password_reset_done')
+    email_template_name = 'account/password_reset_email.html'
+
+
+class UserPasswordResetDoneView(auth_view.PasswordResetDoneView):
+    template_name = 'account/password_reset_done.html'
+
+class UserPasswordResetConfirmView(auth_view.PasswordResetConfirmView):
+    template_name = 'account/password_reset_confirm.html'
+    success_url = reverse_lazy('account:password_reset_complete')
