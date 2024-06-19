@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-327be(yt8mt&e2ldl#n9bt_g9a*+42#(im0=cu=@xyd39vzioi'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -137,6 +137,6 @@ AUTHENTICATION_BACKENDS =[
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
 EMAIL_HOST_USER = '580df56699f324'
-EMAIL_HOST_PASSWORD = '********c9ce'
+EMAIL_HOST_PASSWORD = '9db2e33742c9ce'
 EMAIL_PORT = '2525'
-DEFAULT_FROM_EMAIL = 'Setare Test'
+EMAIL_USE_TLS = True  # If Mailtrap requires TLS

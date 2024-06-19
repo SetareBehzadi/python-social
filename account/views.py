@@ -1,11 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate,login, logout
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth import views as auth_view
 from django.shortcuts import render, redirect
 from django.views import View
-from django.urls import reverse,reverse_lazy
+from django.urls import reverse, reverse_lazy
 
 from account.forms import UserRegistrationForm, UserLoginForm
 from post.models import Post
@@ -17,14 +17,14 @@ class UserRegisterView(View):
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            messages.warning(request,'You have been already logged in.')
+            messages.warning(request, 'You have been already logged in.')
             return redirect('home:home')
         else:
             return super().dispatch(request, *args, **kwargs)
 
     def get(self, request):
         form = self.form_class()
-        return render(request,self.template_name, {'form':form})
+        return render(request, self.template_name, {'form': form})
 
     def post(self, request):
         form = self.form_class(request.POST)
@@ -32,11 +32,12 @@ class UserRegisterView(View):
 
         if form.is_valid():
             clean_data_form = form.cleaned_data
-            User.objects.create_user(clean_data_form['username'],clean_data_form['email'],clean_data_form['password'],)
+            User.objects.create_user(clean_data_form['username'], clean_data_form['email'],
+                                     clean_data_form['password'], )
             messages.success(request, 'You registered successfully', 'success')
             return redirect('home:home')
         else:
-            return render(request, self.template_name, {'form':form})
+            return render(request, self.template_name, {'form': form})
 
 
 class UserLoginView(View):
@@ -51,7 +52,7 @@ class UserLoginView(View):
 
     def get(self, request):
         form = self.form_class
-        return render(request, self.template_name, {'form':form})
+        return render(request, self.template_name, {'form': form})
 
     def post(self, request):
         form = self.form_class(request.POST)
@@ -63,7 +64,7 @@ class UserLoginView(View):
                 messages.success(request, 'you logged in successfully', 'successful')
                 return redirect('home:home')
             messages.error(request, 'something is wrong', 'warning')
-            return render(request,self.template_name, {'form':form})
+            return render(request, self.template_name, {'form': form})
 
 
 class UserLogoutView(LoginRequiredMixin, View):
@@ -73,11 +74,12 @@ class UserLogoutView(LoginRequiredMixin, View):
         messages.success(request, 'you logged out successfully', 'successful')
         return redirect('home:home')
 
+
 class UserProfileView(LoginRequiredMixin, View):
     def get(self, request, user_id):
         user = User.objects.get(pk=user_id)
         posts = Post.objects.filter(user=user)
-        return render(request,'account/profile.html', {'user':user, 'posts':posts})
+        return render(request, 'account/profile.html', {'user': user, 'posts': posts})
 
 
 class UserPasswordResetView(auth_view.PasswordResetView):
@@ -85,10 +87,14 @@ class UserPasswordResetView(auth_view.PasswordResetView):
     success_url = reverse_lazy('account:password_reset_done')
     email_template_name = 'account/password_reset_email.html'
 
-
 class UserPasswordResetDoneView(auth_view.PasswordResetDoneView):
     template_name = 'account/password_reset_done.html'
+
 
 class UserPasswordResetConfirmView(auth_view.PasswordResetConfirmView):
     template_name = 'account/password_reset_confirm.html'
     success_url = reverse_lazy('account:password_reset_complete')
+
+
+class UserPasswordResetCompleteView(auth_view.PasswordResetCompleteView):
+    template_name = 'account/password_reset_complete.html'
