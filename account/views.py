@@ -78,8 +78,7 @@ class UserLogoutView(LoginRequiredMixin, View):
 class UserProfileView(LoginRequiredMixin, View):
     def get(self, request, user_id):
         user = User.objects.get(pk=user_id)
-        posts = Post.objects.filter(user=user)
-        return render(request, 'account/profile.html', {'user': user, 'posts': posts})
+        return render(request, 'account/profile.html', {'user': user})
 
 
 class UserPasswordResetView(auth_view.PasswordResetView):

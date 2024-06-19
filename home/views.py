@@ -7,6 +7,7 @@ from post.models import Post
 class HomeView(View):
     def get(self, request):
         posts = Post.objects.all()
+        # posts = Post.objects.order_by('-title')
         return render(request, 'home/index.html',{'posts':posts})
 
     def post(self, request):

@@ -7,11 +7,11 @@
 
     <div class="card">
         {% if request.user.id == user.id %}
-        <div>
+        <div style="margin:10px">
             <a href="{% url 'post:post_create' %}" class="btn btn-success">Create Post</a>
         </div>
         {% endif %}
-    {% for post in posts %}
+    {% for post in user.posts.all %}
     <a href="{% url 'post:post_detail' post.id post.slug %}" class="card-body">
         <h4>
              {{ post.title }}
