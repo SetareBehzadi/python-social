@@ -8,12 +8,16 @@ from django.views import View
 from django.urls import reverse, reverse_lazy
 
 from account.forms import UserRegistrationForm, UserLoginForm
+from follow.models import Relation
 from post.models import Post
 
 
 class UserRegisterView(View):
     form_class = UserRegistrationForm
     template_name = 'account/register.html'
+
+    def __init__(self, **kwargs):
+        super().__init__(kwargs)
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
@@ -44,6 +48,10 @@ class UserLoginView(View):
     form_class = UserLoginForm
     template_name = 'account/login.html'
 
+    def setup(self, request, *args, **kwargs):
+        self.next = request.GET.get('next')
+        return super().setup(self, request, *args, **kwargs)
+
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             return redirect('home:home')
@@ -62,6 +70,8 @@ class UserLoginView(View):
             if user:
                 login(request, user)
                 messages.success(request, 'you logged in successfully', 'successful')
+                if self.next:
+                    return redirect(self.next)
                 return redirect('home:home')
             messages.error(request, 'something is wrong', 'warning')
             return render(request, self.template_name, {'form': form})
@@ -78,7 +88,12 @@ class UserLogoutView(LoginRequiredMixin, View):
 class UserProfileView(LoginRequiredMixin, View):
     def get(self, request, user_id):
         user = User.objects.get(pk=user_id)
-        return render(request, 'account/profile.html', {'user': user})
+        is_follow= False
+        relation = Relation.objects.filter(from_user=request.user, to_user= user)
+        if relation.exists():
+            is_follow = True
+
+        return render(request, 'account/profile.html', {'user': user, 'is_follow':is_follow})
 
 
 class UserPasswordResetView(auth_view.PasswordResetView):

@@ -11,6 +11,14 @@
             <a href="{% url 'post:post_create' %}" class="btn btn-success">Create Post</a>
         </div>
         {% endif %}
+<div style="margin:10px">
+        {% if request.user.id != user.id and not is_follow %}
+        <a href="{% url 'follow:user_follow' user.id %}" class="btn btn-primary">follow</a>
+
+        {% elif request.user.id != user.id and is_follow %}
+         <a href="{% url 'follow:user_unfollow' user.id %}" class="btn btn-primary">unfollow</a>
+         {% endif %}
+</div>
     {% for post in user.posts.all %}
     <a href="{% url 'post:post_detail' post.id post.slug %}" class="card-body">
         <h4>

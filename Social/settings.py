@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'home.apps.HomeConfig',
     'account.apps.AccountConfig',
     'post.apps.PostConfig',
+    'follow.apps.FollowConfig',
 
 ]
 
