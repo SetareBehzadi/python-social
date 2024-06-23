@@ -43,8 +43,18 @@
             </p>
               <p class="card-body">
              {{ comment.body }}
-        </p>
+                </p>
+            {% with replies=comment.rcomments.all %}
+                {% for reply in replies %}
+
+                        <p class="bg-primary p-3">
+                         {{reply.user}} | {{ reply.body }}
+                            </p>
+                    {% endfor %}
+            {% endwith %}
+
         </div>
+        <br>
         {% empty %}
         <p>
             no Comments Yet ......
