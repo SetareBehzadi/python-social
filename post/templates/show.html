@@ -20,9 +20,11 @@
         {% endif %}
     </footer>
     {% if request.user.is_authenticated %}
+    <a href="{% url 'post:post_like' post.id %}" class="btn btn-primary col-md-2">Like</a>
+    <br>
     <div class="card" style="margin-top:15px">
     <div class="card-body">
-        <form action="" method="post">
+        <form action="" method="post" name="comment">
             {% csrf_token %}
              {{ form.as_p }}
             <input type="submit" value="submit">
@@ -35,7 +37,10 @@
     <div class="col-lg-12">
         <p>
            count: {{comments.count}}
-           count: {{comments.rcomments.count}}
+           reply count: {{comments.rcomments.count}}
+        </p>
+        <p>
+            likeCount = {{votes.count}}
         </p>
         {% for comment in comments %}
         <div class="card bg-dark text-white">

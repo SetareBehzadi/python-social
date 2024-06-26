@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
+from django.contrib.contenttypes.fields import GenericRelation
+from like.models import Like
 
 
 class Post(models.Model):
@@ -10,6 +12,8 @@ class Post(models.Model):
     slug = models.SlugField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    like = GenericRelation(Like)
 
     class Meta:
         ordering = ('-created_at','title')

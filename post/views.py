@@ -5,8 +5,11 @@ from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.utils.text import slugify
+
+from like.models import Like
 from post.forms import PostUpdateForm, CommentForm, CommentReplyForm
 from post.models import Post, Comment
+from django.contrib.contenttypes.models import ContentType
 
 
 class PostDetailView(View):
@@ -22,8 +25,12 @@ class PostDetailView(View):
         #post = Post.objects.get(pk=post_id, slug=post_slug)
         post = self.post_instance
         comments = post.pcomments.filter(is_reply=False)
+        post_content_type = ContentType.objects.get_for_model(Post)
+        pLikes = Like.objects.filter(content_type=post_content_type, object_id=post.id)
+
         return render(request, 'show.html', {'post': post, 'comments': comments,
-                                             'form': self.form_class, 'reply_from': self.form_reply_class})
+                                             'form': self.form_class, 'reply_from': self.form_reply_class,
+                                             'votes':pLikes})
 
     # @login_required =>function decorator x
     @method_decorator(login_required)  # chon baraye yek method mikhahim az method decorator estefade mishe
@@ -114,3 +121,19 @@ class PostAddReplyView(LoginRequiredMixin, View):
             reply.save()
             messages.success(request,'nazare shoma sabt shod', 'success')
         return redirect('post:post_detail', post.id, post.slug)
+
+
+class PostLikeView(LoginRequiredMixin, View):
+    def get(self, request, post_id):
+        post = get_object_or_404(Post, pk=post_id)
+
+        like = Like.objects.filter(user=request.user,
+                                   content_type=ContentType.objects.get_for_model(Post), object_id=post.id)
+        if like.exists():
+            messages.error(request, 'Like is submitted before','error')
+        else:
+            Like.objects.create(user=request.user, content_object=post)
+            messages.success(request,'Like is submit')
+        return redirect('post:post_detail', post.id,post.slug )
+
+

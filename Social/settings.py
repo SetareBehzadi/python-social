@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'account.apps.AccountConfig',
     'post.apps.PostConfig',
     'follow.apps.FollowConfig',
+    'like.apps.LikeConfig',
 
 ]
 

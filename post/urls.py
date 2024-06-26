@@ -1,6 +1,6 @@
 from django.urls import path
 
-from post.views import PostDetailView, PostDeleteView, PostEditView, PostCreatView, PostAddReplyView
+from post.views import PostDetailView, PostDeleteView, PostEditView, PostCreatView, PostAddReplyView, PostLikeView
 
 app_name = 'post'
 urlpatterns = [
@@ -9,4 +9,5 @@ urlpatterns = [
     path('edit/<int:post_id>', PostEditView.as_view(), name='post_edit'),
     path('create', PostCreatView.as_view(), name='post_create'),
     path('reply/<int:post_id>/<int:comment_id>', PostAddReplyView.as_view(), name='reply_comment'),
+    path('like/<int:post_id>/', PostLikeView.as_view(), name='post_like'),
 ]
